@@ -9,7 +9,7 @@ import { RouterOutlet } from '@angular/router';
   selector: 'app-root',
   standalone: true,
   imports: [CommonModule, RouterOutlet],
-  styles:`
+  styles: `
     .worth {
       background-color: red;
     }
@@ -36,7 +36,7 @@ import { RouterOutlet } from '@angular/router';
   `
 })
 
-export class AppComponent{
+export class AppComponent {
   password = '';
   strengthLevel = 0;
   message = 'Enter the password to check it`s strength';
@@ -44,31 +44,55 @@ export class AppComponent{
     this.password = ($event.target as HTMLInputElement).value;
     this.checkStrength()
   }
-  
+
   checkStrength() {
-    if (this.password.length == 0) {
-      this.strengthLevel = 0;
-      this.message = 'Enter the password to check it`s strength'
-    }  else
-    if (this.password.length < 8) {
-      this.strengthLevel = -1;
-      this.message = 'Your password is too short'
-    } else 
-    {
-      const hasLetters = /[a-zA-Z]/.test(this.password);
-      const hasDigits = /[0-9]/.test(this.password);
-      const hasSymbols = /[^a-zA-Z0-9]/.test(this.password);
-      if (hasLetters && hasDigits && hasSymbols) {
-        this.strengthLevel = 3; 
-        this.message = 'Your password is very strong'
-      } else 
-      if (hasLetters && hasDigits || hasSymbols && hasDigits || hasLetters && hasSymbols) {
-        this.strengthLevel = 2; 
+
+    // if (this.password.length == 0) {
+    //   this.strengthLevel = 0;
+    //   this.message = 'Enter the password to check it`s strength'
+    // } else
+    // if (this.password.length < 8) {
+    //     this.strengthLevel = -1;
+    //     this.message = 'Your password is too short'
+    // } else {
+    //     const hasLetters = /[a-zA-Z]/.test(this.password);
+    //     const hasDigits = /[0-9]/.test(this.password);
+    //     const hasSymbols = /[^a-zA-Z0-9]/.test(this.password);
+    //     if (hasLetters && hasDigits && hasSymbols) {
+    //       this.strengthLevel = 3;
+    //       this.message = 'Your password is very strong'
+    //     } else
+    //     if (hasLetters && hasDigits || hasSymbols && hasDigits || hasLetters && hasSymbols) {
+    //       this.strengthLevel = 2;
+    //       this.message = 'Your password is medium, but you can still make it stronger'
+    //     } else {
+    //       this.strengthLevel = 1
+    //       this.message = 'Your password is too easy. You can make it stronger by adding other types of symbols'
+    //     }
+    switch (true) {
+      case this.password.length == 0:
+        this.strengthLevel = 0;
+        this.message = 'Enter the password to check it`s strength';
+        break;
+
+      case this.password.length < 8:
+        this.strengthLevel = -1;
+        this.message = 'Your password is too short'
+        break;
+
+      case /[a-zA-Z]/.test(this.password) && /[0-9]/.test(this.password) && /[^a-zA-Z0-9]/.test(this.password):
+        this.strengthLevel = 3;
+        this.message = 'Your password is very strong';
+        break;
+
+      case /[a-zA-Z]/.test(this.password) && /[0-9]/.test(this.password) || /[^a-zA-Z0-9]/.test(this.password) && /[0-9]/.test(this.password) || /[a-zA-Z]/.test(this.password) && /[^a-zA-Z0-9]/.test(this.password):
+        this.strengthLevel = 2;
         this.message = 'Your password is medium, but you can still make it stronger'
-      } else {
-        this.strengthLevel = 1
-        this.message = 'Your password is too easy. You can make it stronger by adding other types of symbols'
-      } 
+        break;
+
+      default:
+        this.strengthLevel = 1;
+        this.message = 'Your password is too easy. You can make it stronger by adding other types of symbols';
     }
   }
 }
